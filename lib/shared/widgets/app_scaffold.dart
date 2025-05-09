@@ -1,8 +1,9 @@
 // This widget wraps any page with a common AppBar and structure
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:go_router/go_router.dart';
+
+import '../../auth/widgets/login_dialog.dart';
 import '../../providers/auth_provider.dart';
 
 class AppScaffold extends ConsumerWidget {
@@ -16,16 +17,24 @@ class AppScaffold extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Matt Builds'),
+        shadowColor: Colors.black,
+        backgroundColor: const Color(0xFF345D7D),
+        toolbarHeight: 80,
+        elevation: 4,
+        title: Center(child: Image.asset('images/mb_logo.png', height: 400)),
         actions: [
           authState.when(
             data: (user) {
               if (user != null) {
                 return IconButton(
-                  icon: const Icon(Icons.logout),
+                  icon: const Icon(
+                    Icons.logout,
+                    color: Colors.white,
+                  ),
                   tooltip: 'Logout',
                   onPressed: () async {
                     await FirebaseAuth.instance.signOut();
+
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Signed out')),
                     );
@@ -33,9 +42,14 @@ class AppScaffold extends ConsumerWidget {
                 );
               } else {
                 return IconButton(
-                  icon: const Icon(Icons.login),
+                  icon: const Icon(Icons.login, color: Colors.white),
                   tooltip: 'Sign In',
-                  onPressed: () => context.go('/signin'),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (_) => const LoginDialog(),
+                    );
+                  },
                 );
               }
             },

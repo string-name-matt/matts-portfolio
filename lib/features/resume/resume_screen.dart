@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:matt_smith_portfolio/features/resume/widgets/request_access_form.dart';
+import 'package:matt_smith_portfolio/features/resume/widgets/resume_viewer.dart';
 import 'package:matt_smith_portfolio/shared/widgets/app_scaffold.dart';
 
 // 🧠 ConsumerWidget: A Riverpod widget that lets us read providers like auth state
@@ -56,10 +57,12 @@ class ResumeScreen extends ConsumerWidget {
 
         // ✅ User is authorized — show resume content here
         return const AppScaffold(
-          child: Center(
-            child: Text('📄 Welcome! You are authorized to view the resume.'),
+          child: Padding(
+            padding: EdgeInsets.all(24),
+            child: ResumeViewer(),
           ),
         );
+
       },
     );
   }

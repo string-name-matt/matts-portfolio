@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
+import 'package:gpt_markdown/gpt_markdown.dart';
 
 class ResumeViewer extends StatefulWidget {
   const ResumeViewer({super.key});

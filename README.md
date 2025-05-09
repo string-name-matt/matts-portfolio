@@ -1,4 +1,4 @@
-# matt_smith_portfolio
+# Matt Smith's Portfolio
 
-My interactive resume.
+Welcome to my interactive portfolio!
 

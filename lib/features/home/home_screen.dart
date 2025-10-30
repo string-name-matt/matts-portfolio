@@ -1,59 +1,54 @@
-// Basic Flutter imports
 import 'package:flutter/material.dart';
-// Used for navigating between pages (e.g., pushing a new screen)
-import 'package:go_router/go_router.dart';
-
-// Shared scaffold wrapper that includes global app bar and login/logout logic
 import 'package:matt_smith_portfolio/shared/widgets/app_scaffold.dart';
+import 'package:matt_smith_portfolio/shared/theme.dart';
 
-// Reusable custom widgets
-import 'widgets/home_intro.dart';
-import 'widgets/project_card.dart';
+// Import all the impressive new sections
+import 'widgets/hero_section.dart';
+import 'widgets/skills_section.dart';
+import 'widgets/about_section.dart';
+import 'widgets/featured_projects_section.dart';
+import 'widgets/contact_section.dart';
 
-// This is the home screen that appears when you first open the app
+/// Modern, impressive home screen showcasing skills, projects, and personality
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold( // Wraps the page with a common AppBar and layout
-      child: Padding(
-        padding: const EdgeInsets.all(24), // Adds spacing around the entire page
-        child: SingleChildScrollView( // Allows scrolling if content overflows vertically
-          child: Column(
-            children: [
-              const HomeIntro(), // Widget that shows your name, title, and CTA buttons
-              const SizedBox(height: 32), // Adds vertical spacing
+    return AppScaffold(
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Hero section with gradient background and CTA buttons
+            Padding(
+              padding: const EdgeInsets.all(AppTheme.spacingM),
+              child: const HeroSection(),
+            ),
 
-              // Wrap allows items to flow into multiple rows automatically (great for responsive cards)
-              Wrap(
-                spacing: 20,     // Horizontal space between cards
-                runSpacing: 20,  // Vertical space between wrapped rows
-                children: [
-                  // A card representing your first major project
-                  ProjectCard(
-                    title: 'Courthouse Connect',
-                    description: 'Employee app used by 300+ staff. Includes article search, maintenance board, and more.',
-                    onTap: () => context.go('/projects'), // Navigates to the Projects screen
-                  ),
+            SizedBox(height: AppTheme.spacingXXL),
 
-                  // A card representing your second major project
-                  ProjectCard(
-                    title: 'HealthPass',
-                    description: 'Secure health program dashboard with SFTP sync, CSV automation, and AI workflows.',
-                    onTap: () => context.go('/projects'), // Same navigation for now — can be made dynamic later
-                  ),
-                ],
-              )
-            ],
-          ),
+            // About Me section with stats
+            const AboutSection(),
+
+            SizedBox(height: AppTheme.spacingXXL),
+
+            // Technical skills showcase with animated progress bars
+            const SkillsSection(),
+
+            SizedBox(height: AppTheme.spacingXXL),
+
+            // Featured projects gallery
+            const FeaturedProjectsSection(),
+
+            SizedBox(height: AppTheme.spacingXXL),
+
+            // Contact CTA and social links
+            const ContactSection(),
+
+            SizedBox(height: AppTheme.spacingL),
+          ],
         ),
       ),
     );
   }
 }
-
-//  Tips:
-//  Wrap vs Row: Wrap is great when you want content to automatically wrap to the next line instead of overflowing horizontally.
-//  AppScaffold: This is a custom scaffold we built to keep the AppBar (login/logout) consistent across screens.
-//  context.go(): Comes from go_router, and it’s how you navigate to another page.

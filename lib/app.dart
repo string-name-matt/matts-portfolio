@@ -4,6 +4,7 @@ import 'auth/sign_in_screen.dart';
 import 'features/home/home_screen.dart';
 import 'features/projects/project_screen.dart';
 import 'features/resume/resume_screen.dart';
+import 'shared/theme.dart';
 
 final _router = GoRouter(
   routes: [
@@ -20,13 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Matt Smith Portfolio',
+      title: 'Matt Smith - Portfolio',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        useMaterial3: true,
-        fontFamily: 'Sans',
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blueGrey),
-      ),
+      theme: AppTheme.lightTheme,
+      darkTheme: AppTheme.darkTheme,
+      themeMode: ThemeMode.dark, // Use dark theme by default for premium look
       routerConfig: _router,
     );
   }

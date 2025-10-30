@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:matt_smith_portfolio/shared/theme.dart';
 import 'package:matt_smith_portfolio/shared/constants.dart';
+import 'package:matt_smith_portfolio/shared/theme.dart';
 
 class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
@@ -10,7 +10,8 @@ class HeroSection extends StatefulWidget {
   State<HeroSection> createState() => _HeroSectionState();
 }
 
-class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStateMixin {
+class _HeroSectionState extends State<HeroSection>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -65,42 +66,15 @@ class _HeroSectionState extends State<HeroSection> with SingleTickerProviderStat
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               // Profile Image Placeholder
-              Container(
-                width: isMobile ? 120 : 160,
-                height: isMobile ? 120 : 160,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white.withOpacity(0.2),
-                  border: Border.all(
-                    color: Colors.white,
-                    width: 4,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.2),
-                      blurRadius: 20,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.person,
-                    size: isMobile ? 60 : 80,
-                    color: Colors.white.withOpacity(0.7),
-                  ),
+
+              ClipOval(
+                child: Image.asset(
+                  'assets/images/matt.jpg',
+                  width: isMobile ? 120 : 200,
+                  height: isMobile ? 120 : 200,
+                  fit: BoxFit.cover,
                 ),
               ),
-              // TODO: Replace with actual profile image
-              // Uncomment and add your image to assets/images/profile.png
-              // ClipOval(
-              //   child: Image.asset(
-              //     'assets/images/profile.png',
-              //     width: isMobile ? 120 : 160,
-              //     height: isMobile ? 120 : 160,
-              //     fit: BoxFit.cover,
-              //   ),
-              // ),
 
               SizedBox(height: AppTheme.spacingL),
 

@@ -18,7 +18,7 @@ dependencies:
   firebase_auth: ^5.5.3 # For authentication
   google_fonts: ^6.2.1
   cloud_firestore: ^5.6.7 # Firestore DB for storing access requests
-  gpt_markdown: ^1.0.18
+  flutter_markdown: ^0.7.4+1
   url_launcher: ^6.3.1 # For opening external URLs (social links, etc.)
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -46,7 +46,11 @@ flutter:
   assets:
     - assets/resume.md
     - assets/images/mb_logo.png
-    # TODO: Add your project images here
+    - assets/images/matt.jpg
+    - assets/images/projects/healthpass_hero.png
+    - assets/images/projects/healthpass_thumb.png
+    #    - assets/images/projects/courthouse_hero.png
+    #    - assets/images/projects/courthouse_thumb.png
     # - assets/images/profile.png
     # - assets/images/projects/
 

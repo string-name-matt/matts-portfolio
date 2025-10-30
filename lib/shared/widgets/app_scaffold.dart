@@ -5,8 +5,8 @@ import 'package:go_router/go_router.dart';
 
 import '../../auth/widgets/login_dialog.dart';
 import '../../providers/auth_provider.dart';
-import '../theme.dart';
 import '../constants.dart';
+import '../theme.dart';
 
 /// Global scaffold providing consistent AppBar and navigation across all pages
 class AppScaffold extends ConsumerWidget {
@@ -40,7 +40,7 @@ class AppScaffold extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(8),
                   child: Image.asset(
                     'assets/images/mb_logo.png',
-                    height: isMobile ? 32 : 40,
+                    height: isMobile ? 32 : 100,
                     errorBuilder: (context, error, stackTrace) {
                       // Fallback if logo not found
                       return Container(

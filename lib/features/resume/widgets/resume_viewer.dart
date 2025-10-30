@@ -1,8 +1,8 @@
-// Renders the Markdown resume file for authorized users using gpt_markdown
+// Renders the Markdown resume file for authorized users using flutter_markdown
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
-import 'package:gpt_markdown/gpt_markdown.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 
 class ResumeViewer extends StatefulWidget {
   const ResumeViewer({super.key});
@@ -32,9 +32,11 @@ class _ResumeViewerState extends State<ResumeViewer> {
   Widget build(BuildContext context) {
     return _markdownContent.isEmpty
         ? const Center(child: CircularProgressIndicator())
-        : GptMarkdown(
-      _markdownContent,
-      style: const TextStyle(fontSize: 16),
+        : Markdown(
+      data: _markdownContent,
+      styleSheet: MarkdownStyleSheet(
+        p: const TextStyle(fontSize: 16),
+      ),
     );
   }
 }

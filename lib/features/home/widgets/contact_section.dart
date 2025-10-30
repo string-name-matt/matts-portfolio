@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:matt_smith_portfolio/shared/theme.dart';
 import 'package:matt_smith_portfolio/shared/constants.dart';
+import 'package:matt_smith_portfolio/shared/theme.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ContactSection extends StatelessWidget {
@@ -20,7 +20,8 @@ class ContactSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
+      padding:
+          EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
       child: Column(
         children: [
           // CTA Card
@@ -113,26 +114,14 @@ class ContactSection extends StatelessWidget {
                 icon: Icons.code,
                 label: 'GitHub',
                 onPressed: () {
-                  // TODO: Update URL in constants.dart
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('TODO: Update GitHub URL in constants.dart'),
-                    ),
-                  );
-                  // _launchUrl(AppConstants.githubUrl);
+                  _launchUrl(AppConstants.githubUrl);
                 },
               ),
               _SocialButton(
                 icon: Icons.work,
                 label: 'LinkedIn',
                 onPressed: () {
-                  // TODO: Update URL in constants.dart
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('TODO: Update LinkedIn URL in constants.dart'),
-                    ),
-                  );
-                  // _launchUrl(AppConstants.linkedinUrl);
+                  _launchUrl(AppConstants.linkedinUrl);
                 },
               ),
               _SocialButton(
@@ -153,7 +142,7 @@ class ContactSection extends StatelessWidget {
 
           // Footer
           Text(
-            '© 2024 ${AppConstants.name}. Built with Flutter & Firebase.',
+            '© 2025 ${AppConstants.name}. Built with Flutter & Firebase.',
             style: AppTheme.caption.copyWith(
               color: AppTheme.mutedText,
             ),

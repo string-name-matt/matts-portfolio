@@ -12,19 +12,16 @@ class LoginDialog extends StatefulWidget {
 }
 
 class _LoginDialogState extends State<LoginDialog> {
-  // Controllers to handle user input
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController companyController = TextEditingController();
   final TextEditingController sourceController = TextEditingController();
 
-  bool _isLoading = false; // Indicates whether a background process is ongoing
-  bool _showAccessRequest =
-      false; // Toggles between login and access request forms
-  String? _errorMessage; // Displays error messages
-  String? _successMessage; // Displays success messages
+  bool _isLoading = false;
+  bool _showAccessRequest = false;
+  String? _errorMessage;
+  String? _successMessage;
 
-  // Handles login logic with Firebase Auth
   Future<void> _handleLogin() async {
     setState(() {
       _isLoading = true;
@@ -39,7 +36,7 @@ class _LoginDialogState extends State<LoginDialog> {
       );
 
       if (!mounted) return;
-      Navigator.of(context).pop(); // Close dialog upon successful login
+      Navigator.of(context).pop();
     } on FirebaseAuthException catch (e) {
       setState(() {
         _errorMessage = e.message;
@@ -51,7 +48,6 @@ class _LoginDialogState extends State<LoginDialog> {
     }
   }
 
-  // Sends a password reset email
   Future<void> _handlePasswordReset() async {
     try {
       await FirebaseAuth.instance.sendPasswordResetEmail(
@@ -63,7 +59,6 @@ class _LoginDialogState extends State<LoginDialog> {
     }
   }
 
-  // Submits an access request to Firestore
   Future<void> _submitAccessRequest() async {
     final data = {
       'email': emailController.text.trim(),
@@ -85,18 +80,29 @@ class _LoginDialogState extends State<LoginDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      insetPadding: const EdgeInsets.symmetric(horizontal: 40),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-      // Rounded dialog box
       child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 450, maxHeight: 500),
-        // Set a consistent width
+        constraints: const BoxConstraints(maxWidth: 450),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            // Dialog takes up only the needed space
             children: [
+              IconButton(
+                icon: const Icon(Icons.close),
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+              // Logo section at top of dialog
+              Padding(
+                padding: const EdgeInsets.only(bottom: 16),
+                child: Image.asset(
+                  'images/mb_logo.png', fit: BoxFit.cover,
+                  // Make sure the logo is listed in pubspec.yaml
+                  height: 100,
+                  width: 300,
+                ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -104,15 +110,9 @@ class _LoginDialogState extends State<LoginDialog> {
                     _showAccessRequest ? 'Request Access' : 'Sign In',
                     style: Theme.of(context).textTheme.headlineSmall,
                   ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () =>
-                        Navigator.of(context).pop(), // Close the dialog
-                  )
                 ],
               ),
               const SizedBox(height: 16),
-              // Email input
               TextField(
                 controller: emailController,
                 decoration: const InputDecoration(
@@ -122,7 +122,6 @@ class _LoginDialogState extends State<LoginDialog> {
                 keyboardType: TextInputType.emailAddress,
               ),
               const SizedBox(height: 16),
-              // Conditional form inputs based on view state
               if (_showAccessRequest)
                 Column(
                   children: [
@@ -152,19 +151,17 @@ class _LoginDialogState extends State<LoginDialog> {
                         labelText: 'Password',
                         border: OutlineInputBorder(),
                       ),
-                      obscureText: true, // Hide password input
+                      obscureText: true,
                     ),
                     Align(
                       alignment: Alignment.centerRight,
                       child: TextButton(
                         onPressed: _handlePasswordReset,
-                        // Trigger password reset
                         child: const Text('Forgot Password?'),
                       ),
                     ),
                   ],
                 ),
-              // Display error message if any
               if (_errorMessage != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -173,7 +170,6 @@ class _LoginDialogState extends State<LoginDialog> {
                     style: const TextStyle(color: Colors.red),
                   ),
                 ),
-              // Display success message if any
               if (_successMessage != null)
                 Padding(
                   padding: const EdgeInsets.only(top: 12),
@@ -186,7 +182,6 @@ class _LoginDialogState extends State<LoginDialog> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Toggle between access request and sign in view
                   TextButton(
                     onPressed: () => setState(
                         () => _showAccessRequest = !_showAccessRequest),
@@ -194,7 +189,6 @@ class _LoginDialogState extends State<LoginDialog> {
                         ? 'Back to Sign In'
                         : 'Request Access'),
                   ),
-                  // Show loading indicator or submit button
                   ElevatedButton(
                     onPressed: _isLoading
                         ? null

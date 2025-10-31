@@ -4,7 +4,7 @@
 
 A modern, responsive portfolio website built with Flutter showcasing production applications serving 2,000+ active users. This portfolio demonstrates expertise in mobile development, cloud architecture, AI integration, and building scalable enterprise solutions.
 
-🌐 **Live Site:** [matt-smith-dev.com](https://mattbuilds.dev)
+🌐 **Live Site:** [mattbuilds.dev](https://mattbuilds.dev)
 
 ---
 

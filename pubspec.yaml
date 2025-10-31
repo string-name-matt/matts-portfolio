@@ -52,8 +52,23 @@ flutter:
     - assets/images/projects/healthpass_thumb.png
     #    - assets/images/projects/courthouse_hero.png
     #    - assets/images/projects/courthouse_thumb.png
-    # - assets/images/profile.png
-    # - assets/images/projects/
+    - assets/images/logos/flutter_logo.png
+    - assets/images/logos/dart_logo.png
+    - assets/images/logos/riverpod_logo.png
+    - assets/images/logos/firebase_logo.png
+    - assets/images/logos/cloud_functions_logo.png
+    - assets/images/logos/node_logo.png
+    - assets/images/logos/firestore_logo.png
+    - assets/images/logos/rest_logo.png
+    - assets/images/logos/git_logo.png
+    - assets/images/logos/google_cloud_logo.png
+    - assets/images/logos/vscode_logo.png
+    - assets/images/logos/openai_logo.png
+    - assets/images/logos/gemini_logo.png
+    - assets/images/logos/stripe_logo.png
+    - assets/images/logos/twilio_logo.png
+    #    - assets/images/projects/courthouse_hero.png
+    #    - assets/images/projects/courthouse_thumb.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

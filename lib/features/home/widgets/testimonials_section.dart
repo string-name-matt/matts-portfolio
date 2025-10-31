@@ -45,7 +45,7 @@ class TestimonialsSection extends StatelessWidget {
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: AppTheme.spacingM,
                   mainAxisSpacing: AppTheme.spacingM,
-                  childAspectRatio: isMobile ? 1.0 : 1.3,
+                  childAspectRatio: isMobile ? 1.0 : 1.6,
                 ),
                 itemCount: AppConstants.testimonials.length,
                 itemBuilder: (context, index) {

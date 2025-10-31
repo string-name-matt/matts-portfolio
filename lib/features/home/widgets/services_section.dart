@@ -51,7 +51,7 @@ class ServicesSection extends StatelessWidget {
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: AppTheme.spacingM,
                   mainAxisSpacing: AppTheme.spacingM,
-                  childAspectRatio: 0.85,
+                  childAspectRatio: crossAxisCount == 3 ? 1.0 : crossAxisCount == 2 ? 1.1 : 1.0,
                 ),
                 itemCount: AppConstants.services.length,
                 itemBuilder: (context, index) {
@@ -65,29 +65,72 @@ class ServicesSection extends StatelessWidget {
 
           SizedBox(height: AppTheme.spacingXL),
 
-          // CTA Button
-          ElevatedButton.icon(
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Email me at: ${AppConstants.email}'),
-                  backgroundColor: AppTheme.darkBg,
-                  action: SnackBarAction(
-                    label: 'Close',
-                    textColor: AppTheme.primaryBlue,
-                    onPressed: () {},
+          // Call to Action Section
+          Container(
+            padding: const EdgeInsets.all(AppTheme.spacingL),
+            decoration: BoxDecoration(
+              gradient: AppTheme.primaryGradient,
+              borderRadius: BorderRadius.circular(AppTheme.radiusL),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'Ready to start your project?',
+                  style: AppTheme.headingLarge.copyWith(
+                    color: Colors.white,
+                    fontSize: isMobile ? 24 : 32,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppTheme.spacingS),
+                Text(
+                  'Contact me for a free consultation and custom quote',
+                  style: AppTheme.bodyLarge.copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: AppTheme.spacingL),
+                ElevatedButton.icon(
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Row(
+                          children: [
+                            const Icon(Icons.email, color: Colors.white),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text('Email: ${AppConstants.email}'),
+                            ),
+                          ],
+                        ),
+                        backgroundColor: AppTheme.darkBg,
+                        action: SnackBarAction(
+                          label: 'Close',
+                          textColor: AppTheme.primaryBlue,
+                          onPressed: () {},
+                        ),
+                        duration: const Duration(seconds: 5),
+                      ),
+                    );
+                  },
+                  icon: const Icon(Icons.mail_outline, size: 24),
+                  label: const Text('Get a Free Quote'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.white,
+                    foregroundColor: AppTheme.primaryBlue,
+                    padding: EdgeInsets.symmetric(
+                      horizontal: isMobile ? 32 : 48,
+                      vertical: isMobile ? 16 : 24,
+                    ),
+                    textStyle: AppTheme.headingMedium.copyWith(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    elevation: 4,
                   ),
                 ),
-              );
-            },
-            icon: const Icon(Icons.email),
-            label: const Text('Get a Quote'),
-            style: ElevatedButton.styleFrom(
-              padding: EdgeInsets.symmetric(
-                horizontal: isMobile ? 32 : 48,
-                vertical: isMobile ? 16 : 20,
-              ),
-              textStyle: AppTheme.headingMedium.copyWith(fontSize: 18),
+              ],
             ),
           ),
         ],
@@ -205,18 +248,6 @@ class _ServiceCardState extends State<_ServiceCard> {
                 ),
               ),
 
-              const Divider(color: AppTheme.mutedText),
-
-              SizedBox(height: AppTheme.spacingS),
-
-              // Price
-              Text(
-                widget.service.startingPrice,
-                style: AppTheme.headingMedium.copyWith(
-                  color: AppTheme.primaryBlue,
-                  fontSize: 18,
-                ),
-              ),
             ],
           ),
         ),

@@ -177,11 +177,43 @@ class _AnimatedSkillBarState extends State<_AnimatedSkillBar>
       children: [
         Row(
           children: [
-            Text(
-              widget.skill.icon,
-              style: const TextStyle(fontSize: 16),
-            ),
-            const SizedBox(width: 8),
+            // Display logo image
+            widget.skill.icon.isNotEmpty
+                ? Image.asset(
+                    widget.skill.icon,
+                    width: 20,
+                    height: 20,
+                    errorBuilder: (context, error, stackTrace) {
+                      // Fallback to text if image fails to load
+                      return Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          color: AppTheme.primaryBlue.withOpacity(0.2),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: const Icon(
+                          Icons.code,
+                          size: 14,
+                          color: AppTheme.primaryBlue,
+                        ),
+                      );
+                    },
+                  )
+                : Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      color: AppTheme.primaryBlue.withOpacity(0.2),
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: const Icon(
+                      Icons.code,
+                      size: 14,
+                      color: AppTheme.primaryBlue,
+                    ),
+                  ),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
                 widget.skill.name,

@@ -63,8 +63,8 @@ class _MetricCard extends StatelessWidget {
     final size = MediaQuery.of(context).size;
     final isMobile = size.width < 768;
     return Container(
-      width: 220,
-      height: isMobile ? 300 : 350,
+      width: isMobile ? 300 : 300,
+      height: isMobile ? 280 : 300,
       padding: const EdgeInsets.all(AppTheme.spacingL),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.1),

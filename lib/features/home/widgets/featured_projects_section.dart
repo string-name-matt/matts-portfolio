@@ -49,7 +49,7 @@ class FeaturedProjectsSection extends StatelessWidget {
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: AppTheme.spacingM,
                   mainAxisSpacing: AppTheme.spacingM,
-                  childAspectRatio: isMobile ? 0.8 : 1.1,
+                  childAspectRatio: isMobile ? 0.85 : 1.35,
                 ),
                 itemCount: featuredProjects.length,
                 itemBuilder: (context, index) {

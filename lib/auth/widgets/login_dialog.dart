@@ -86,21 +86,19 @@ class _LoginDialogState extends State<LoginDialog> {
         constraints: const BoxConstraints(maxWidth: 450),
         child: Padding(
           padding: const EdgeInsets.all(24),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+          child: Stack(
             children: [
-              IconButton(
-                icon: const Icon(Icons.close),
-                onPressed: () => Navigator.of(context).pop(),
-              ),
-              // Logo section at top of dialog
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  // Logo section at top of dialog
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Image.asset(
-                  'images/mb_logo.png', fit: BoxFit.cover,
+                  'images/mb_logo.png', fit: BoxFit.fitHeight,
                   // Make sure the logo is listed in pubspec.yaml
-                  height: 100,
-                  width: 300,
+                  height: 200,
+                  width: 200,
                 ),
               ),
               Row(
@@ -205,9 +203,19 @@ class _LoginDialogState extends State<LoginDialog> {
                             _showAccessRequest ? 'Submit Request' : 'Sign In'),
                   ),
                 ],
-              )
+              ),
             ],
           ),
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ),
+        ],
+      ),
         ),
       ),
     );

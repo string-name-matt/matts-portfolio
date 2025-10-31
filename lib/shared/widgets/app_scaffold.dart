@@ -23,7 +23,7 @@ class AppScaffold extends ConsumerWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: AppTheme.darkBg,
-        toolbarHeight: isMobile ? 64 : 72,
+        toolbarHeight: isMobile ? 80 : 100,
         title: InkWell(
           onTap: () => context.go('/'),
           borderRadius: BorderRadius.circular(AppTheme.radiusS),
@@ -38,30 +38,35 @@ class AppScaffold extends ConsumerWidget {
                 // Logo
                 ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.asset(
-                    'assets/images/mb_logo.png',
-                    height: isMobile ? 32 : 100,
-                    errorBuilder: (context, error, stackTrace) {
-                      // Fallback if logo not found
-                      return Container(
-                        width: isMobile ? 32 : 40,
-                        height: isMobile ? 32 : 40,
-                        decoration: BoxDecoration(
-                          color: AppTheme.primaryBlue,
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'MS',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                              fontSize: isMobile ? 14 : 16,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20, bottom: 20),
+                    child: Image.asset(
+                      isMobile
+                          ? 'assets/images/mb_logo_single.png'
+                          : 'assets/images/mb_logo.png',
+                      height: isMobile ? 80 : 130,
+                      errorBuilder: (context, error, stackTrace) {
+                        // Fallback if logo not found
+                        return Container(
+                          width: isMobile ? 32 : 40,
+                          height: isMobile ? 32 : 40,
+                          decoration: BoxDecoration(
+                            color: AppTheme.primaryBlue,
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'MS',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: isMobile ? 14 : 16,
+                              ),
                             ),
                           ),
-                        ),
-                      );
-                    },
+                        );
+                      },
+                    ),
                   ),
                 ),
                 if (!isMobile) ...[

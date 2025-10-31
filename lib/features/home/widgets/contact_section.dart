@@ -142,7 +142,7 @@ class ContactSection extends StatelessWidget {
 
           // Footer
           Text(
-            '© 2025 ${AppConstants.name}. Built with Flutter & Firebase.',
+            '© 2025 ${AppConstants.name} Built with Flutter & Firebase.',
             style: AppTheme.caption.copyWith(
               color: AppTheme.mutedText,
             ),

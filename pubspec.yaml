@@ -46,6 +46,7 @@ flutter:
   assets:
     - assets/resume.md
     - assets/images/mb_logo.png
+    - assets/images/mb_logo_single.png
     - assets/images/matt.jpg
     - assets/images/projects/healthpass_hero.png
     - assets/images/projects/healthpass_thumb.png

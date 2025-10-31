@@ -114,55 +114,6 @@ This portfolio website itself showcases modern development practices:
 - 💬 Client testimonials
 - 📧 Contact and social links
 
----
-
-## 🚀 Getting Started
-
-### Prerequisites
-- Flutter SDK (3.0+)
-- Firebase account and project
-- Dart SDK
-
-### Installation
-
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/string-name-matt/matt_smith_portfolio.git
-   cd matt_smith_portfolio
-   ```
-
-2. **Install dependencies**
-   ```bash
-   flutter pub get
-   ```
-
-3. **Configure Firebase**
-   - Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com)
-   - Add your Firebase configuration
-   - Enable Authentication and Firestore
-
-4. **Run the application**
-   ```bash
-   # For web
-   flutter run -d chrome
-
-   # For mobile (iOS/Android)
-   flutter run
-   ```
-
-5. **Build for production**
-   ```bash
-   # Web
-   flutter build web --release
-
-   # iOS
-   flutter build ios --release
-
-   # Android
-   flutter build apk --release
-   ```
-
----
 
 ## 📂 Project Structure
 
@@ -208,8 +159,7 @@ lib/
 - 📧 Email: stringnamematt@gmail.com
 - 💼 LinkedIn: [matthew-smith-dev](https://www.linkedin.com/in/matthew-smith-dev/)
 - 🐙 GitHub: [string-name-matt](https://github.com/string-name-matt)
-- 🌐 Website: [matt-smith-dev.com](https://matt-smith-dev.com)
-- 📱 Phone: +1 (503) 951-5464
+- 🌐 Website: [mattbuilds.dev](https://mattbuilds.dev)
 
 ---
 
@@ -223,7 +173,6 @@ I'm available for:
 - 🔧 Technical consulting and code review
 - 📱 Mobile app development (iOS & Android)
 
-**Starting rates:** From $3,000 for API integration to $150/hour for consulting
 
 ---
 
@@ -248,7 +197,7 @@ If you found this portfolio impressive, feel free to:
 
 ### 🚀 Ready to build something amazing together?
 
-**[Get in Touch](mailto:stringnamematt@gmail.com)** | **[View Live Portfolio](https://matt-smith-dev.com)**
+**[Get in Touch](mailto:stringnamematt@gmail.com)** | **[View Live Portfolio](https://mattbuilds.dev)**
 
 </div>
 

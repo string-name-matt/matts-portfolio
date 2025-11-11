@@ -140,19 +140,17 @@ class _SkillCategoryCardState extends State<_SkillCategoryCard> {
               const SizedBox(height: AppTheme.spacingM),
 
               // Skills List
-              Expanded(
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: widget.skills.length,
-                  itemBuilder: (context, index) {
-                    final skill = widget.skills[index];
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
-                      child: _AnimatedSkillBar(skill: skill),
-                    );
-                  },
-                ),
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.skills.length,
+                itemBuilder: (context, index) {
+                  final skill = widget.skills[index];
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
+                    child: _AnimatedSkillBar(skill: skill),
+                  );
+                },
               ),
             ],
           ),

@@ -88,15 +88,15 @@ class _TestimonialCard extends StatelessWidget {
             size: 40,
           ),
           SizedBox(height: AppTheme.spacingM),
-          Expanded(
-            child: Text(
-              testimonial.quote,
-              style: AppTheme.bodyMedium.copyWith(
-                color: AppTheme.lightText,
-                fontSize: 15,
-                fontStyle: FontStyle.italic,
-              ),
+          Text(
+            testimonial.quote,
+            style: AppTheme.bodyMedium.copyWith(
+              color: AppTheme.lightText,
+              fontSize: 15,
+              fontStyle: FontStyle.italic,
             ),
+            maxLines: 6,
+            overflow: TextOverflow.ellipsis,
           ),
           SizedBox(height: AppTheme.spacingM),
           const Divider(color: AppTheme.mutedText),

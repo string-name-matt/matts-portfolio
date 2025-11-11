@@ -74,16 +74,26 @@ class _ParticleBackgroundState extends State<ParticleBackground>
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final size = Size(constraints.maxWidth, constraints.maxHeight);
-        _initializeParticles(size);
-
         return Stack(
           children: [
-            CustomPaint(
-              size: size,
-              painter: ParticlePainter(
-                particles: particles,
-                color: widget.particleColor,
+            Positioned.fill(
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  // Only initialize if we have valid, bounded constraints
+                  if (constraints.maxWidth.isFinite && constraints.maxHeight.isFinite) {
+                    final size = Size(constraints.maxWidth, constraints.maxHeight);
+                    WidgetsBinding.instance.addPostFrameCallback((_) {
+                      _initializeParticles(size);
+                    });
+                  }
+
+                  return CustomPaint(
+                    painter: ParticlePainter(
+                      particles: particles,
+                      color: widget.particleColor,
+                    ),
+                  );
+                },
               ),
             ),
             widget.child,

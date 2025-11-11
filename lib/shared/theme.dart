@@ -28,6 +28,9 @@ class AppTheme {
   static const double radiusL = 16.0;
   static const double radiusXL = 24.0;
 
+  // Border Radius aliases (for consistency with different naming conventions)
+  static const double borderRadiusM = radiusM;
+
   // Shadows
   static List<BoxShadow> cardShadow = [
     BoxShadow(

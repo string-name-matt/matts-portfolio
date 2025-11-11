@@ -99,11 +99,19 @@ class _ProjectScreenState extends State<ProjectScreen> {
               // Projects Grid
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final crossAxisCount = constraints.maxWidth > 1200
-                      ? 3
-                      : constraints.maxWidth > 768
-                          ? 2
-                          : 1;
+                  final isDesktop = constraints.maxWidth > 1200;
+                  final isTablet = constraints.maxWidth > 768 && constraints.maxWidth <= 1200;
+                  final crossAxisCount = isDesktop ? 3 : (isTablet ? 2 : 1);
+
+                  // Adjust aspect ratio based on screen size
+                  double aspectRatio;
+                  if (isMobile) {
+                    aspectRatio = 0.75; // Taller cards on mobile for better content fit
+                  } else if (isTablet) {
+                    aspectRatio = 0.8;
+                  } else {
+                    aspectRatio = 0.85;
+                  }
 
                   return GridView.builder(
                     shrinkWrap: true,
@@ -112,12 +120,13 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       crossAxisCount: crossAxisCount,
                       crossAxisSpacing: AppTheme.spacingM,
                       mainAxisSpacing: AppTheme.spacingM,
-                      childAspectRatio: 0.9,
+                      childAspectRatio: aspectRatio,
                     ),
                     itemCount: _filteredProjects.length,
                     itemBuilder: (context, index) {
                       return _ProjectCard(
                         project: _filteredProjects[index],
+                        isMobile: isMobile,
                       );
                     },
                   );
@@ -156,19 +165,24 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
 class _ProjectCard extends StatefulWidget {
   final ProjectItem project;
+  final bool isMobile;
 
-  const _ProjectCard({required this.project});
+  const _ProjectCard({
+    required this.project,
+    required this.isMobile,
+  });
 
   @override
   State<_ProjectCard> createState() => _ProjectCardState();
 }
 
 class _ProjectCardState extends State<_ProjectCard> {
-  bool _isExpanded = false;
   bool _isHovered = false;
 
   @override
   Widget build(BuildContext context) {
+    final imageHeight = widget.isMobile ? 140.0 : 160.0;
+
     return MouseRegion(
       onEnter: (_) => setState(() => _isHovered = true),
       onExit: (_) => setState(() => _isHovered = false),
@@ -189,10 +203,11 @@ class _ProjectCardState extends State<_ProjectCard> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Project Image Placeholder
               Container(
-                height: 180,
+                height: imageHeight,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -213,7 +228,7 @@ class _ProjectCardState extends State<_ProjectCard> {
                     children: [
                       Icon(
                         Icons.image_outlined,
-                        size: 40,
+                        size: widget.isMobile ? 32 : 40,
                         color: AppTheme.mutedText,
                       ),
                       const SizedBox(height: 8),
@@ -242,26 +257,29 @@ class _ProjectCardState extends State<_ProjectCard> {
               //   ),
               //   child: Image.asset(
               //     widget.project.imageUrl,
-              //     height: 180,
+              //     height: imageHeight,
               //     width: double.infinity,
               //     fit: BoxFit.cover,
               //   ),
               // ),
 
               // Content
-              Expanded(
+              Flexible(
                 child: Padding(
-                  padding: const EdgeInsets.all(AppTheme.spacingM),
+                  padding: EdgeInsets.all(
+                    widget.isMobile ? AppTheme.spacingS : AppTheme.spacingM,
+                  ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       // Status & Category
                       Row(
                         children: [
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
+                              horizontal: 8,
+                              vertical: 3,
                             ),
                             decoration: BoxDecoration(
                               color: AppTheme.success.withOpacity(0.2),
@@ -284,8 +302,8 @@ class _ProjectCardState extends State<_ProjectCard> {
                           const Spacer(),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 4,
+                              horizontal: 8,
+                              vertical: 3,
                             ),
                             decoration: BoxDecoration(
                               color: AppTheme.primaryBlue.withOpacity(0.2),
@@ -303,63 +321,44 @@ class _ProjectCardState extends State<_ProjectCard> {
                         ],
                       ),
 
-                      SizedBox(height: AppTheme.spacingS),
+                      SizedBox(height: widget.isMobile ? 8 : AppTheme.spacingS),
 
                       // Title
                       Text(
                         widget.project.title,
                         style: AppTheme.headingMedium.copyWith(
                           color: AppTheme.lightText,
-                          fontSize: 20,
+                          fontSize: widget.isMobile ? 18 : 20,
                         ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
 
-                      SizedBox(height: AppTheme.spacingS),
+                      SizedBox(height: widget.isMobile ? 6 : AppTheme.spacingS),
 
-                      // Description
+                      // Description - Always truncated to fit layout
                       Text(
-                        _isExpanded
-                            ? widget.project.fullDescription
-                            : widget.project.shortDescription,
+                        widget.project.shortDescription,
                         style: AppTheme.bodyMedium.copyWith(
                           color: AppTheme.mutedText,
-                          fontSize: 13,
+                          fontSize: widget.isMobile ? 12 : 13,
+                          height: 1.4,
                         ),
-                        maxLines: _isExpanded ? null : 2,
-                        overflow: _isExpanded ? null : TextOverflow.ellipsis,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                       ),
 
-                      if (widget.project.fullDescription.length > 100)
-                        TextButton(
-                          onPressed: () {
-                            setState(() {
-                              _isExpanded = !_isExpanded;
-                            });
-                          },
-                          style: TextButton.styleFrom(
-                            padding: EdgeInsets.zero,
-                            minimumSize: const Size(0, 30),
-                          ),
-                          child: Text(
-                            _isExpanded ? 'Read less' : 'Read more',
-                            style: AppTheme.caption.copyWith(
-                              color: AppTheme.primaryBlue,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ),
+                      SizedBox(height: widget.isMobile ? 8 : AppTheme.spacingS),
 
-                      const Spacer(),
-
-                      // Technologies
+                      // Technologies - Show first 4 only
                       Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: widget.project.technologies.map((tech) {
+                        spacing: 4,
+                        runSpacing: 4,
+                        children: widget.project.technologies.take(4).map((tech) {
                           return Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 8,
-                              vertical: 3,
+                              horizontal: 6,
+                              vertical: 2,
                             ),
                             decoration: BoxDecoration(
                               color: AppTheme.primaryBlue.withOpacity(0.1),
@@ -370,36 +369,33 @@ class _ProjectCardState extends State<_ProjectCard> {
                               tech,
                               style: AppTheme.caption.copyWith(
                                 color: AppTheme.primaryBlue,
-                                fontSize: 10,
+                                fontSize: 9,
                               ),
                             ),
                           );
                         }).toList(),
                       ),
 
-                      SizedBox(height: AppTheme.spacingM),
+                      SizedBox(height: widget.isMobile ? 8 : AppTheme.spacingS),
 
-                      // Action Buttons
-                      Row(
-                        children: [
-                          Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                _showProjectDetailsDialog(context);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 12,
-                                  vertical: 10,
-                                ),
-                              ),
-                              child: const Text(
-                                'View Details',
-                                style: TextStyle(fontSize: 12),
-                              ),
+                      // Action Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _showProjectDetailsDialog(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: widget.isMobile ? 8 : 10,
                             ),
                           ),
-                        ],
+                          child: Text(
+                            'View Details',
+                            style: TextStyle(fontSize: widget.isMobile ? 11 : 12),
+                          ),
+                        ),
                       ),
                     ],
                   ),

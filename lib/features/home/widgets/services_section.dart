@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:matt_smith_portfolio/shared/theme.dart';
 import 'package:matt_smith_portfolio/shared/constants.dart';
+import 'package:matt_smith_portfolio/shared/theme.dart';
 
 class ServicesSection extends StatelessWidget {
   const ServicesSection({super.key});
@@ -12,7 +12,8 @@ class ServicesSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
+      padding:
+          EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
       child: Column(
         children: [
           // Section Title
@@ -51,7 +52,11 @@ class ServicesSection extends StatelessWidget {
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: AppTheme.spacingM,
                   mainAxisSpacing: AppTheme.spacingM,
-                  childAspectRatio: crossAxisCount == 3 ? 1.0 : crossAxisCount == 2 ? 1.1 : 1.0,
+                  childAspectRatio: crossAxisCount == 3
+                      ? 1.0
+                      : crossAxisCount == 2
+                          ? 1.1
+                          : 0.7,
                 ),
                 itemCount: AppConstants.services.length,
                 itemBuilder: (context, index) {
@@ -158,8 +163,7 @@ class _ServiceCardState extends State<_ServiceCard> {
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        transform: Matrix4.identity()
-          ..translate(0.0, _isHovered ? -8.0 : 0.0),
+        transform: Matrix4.identity()..translate(0.0, _isHovered ? -8.0 : 0.0),
         child: Container(
           padding: const EdgeInsets.all(AppTheme.spacingL),
           decoration: BoxDecoration(
@@ -247,7 +251,6 @@ class _ServiceCardState extends State<_ServiceCard> {
                   },
                 ),
               ),
-
             ],
           ),
         ),

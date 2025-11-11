@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:matt_smith_portfolio/shared/theme.dart';
 import 'package:matt_smith_portfolio/shared/constants.dart';
+import 'package:matt_smith_portfolio/shared/theme.dart';
 
 class TestimonialsSection extends StatelessWidget {
   const TestimonialsSection({super.key});
@@ -12,7 +12,8 @@ class TestimonialsSection extends StatelessWidget {
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
+      padding:
+          EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
       child: Column(
         children: [
           Text(
@@ -31,9 +32,7 @@ class TestimonialsSection extends StatelessWidget {
             ),
             textAlign: TextAlign.center,
           ),
-
           SizedBox(height: AppTheme.spacingXL),
-
           LayoutBuilder(
             builder: (context, constraints) {
               final crossAxisCount = constraints.maxWidth > 768 ? 2 : 1;

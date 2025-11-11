@@ -49,7 +49,7 @@ class FeaturedProjectsSection extends StatelessWidget {
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: AppTheme.spacingM,
                   mainAxisSpacing: AppTheme.spacingM,
-                  childAspectRatio: isMobile ? 0.85 : 1.35,
+                  childAspectRatio: isMobile ? 0.7 : 1.35,
                 ),
                 itemCount: featuredProjects.length,
                 itemBuilder: (context, index) {
@@ -123,7 +123,7 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
             children: [
               // Project Image Placeholder
               Container(
-                height: isMobile ? 150 : 200,
+                height: isMobile ? 120 : 200,
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
                     begin: Alignment.topLeft,
@@ -185,9 +185,10 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
               // Content
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(AppTheme.spacingM),
+                  padding: EdgeInsets.all(isMobile ? AppTheme.spacingS : AppTheme.spacingM),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       // Status Badge
                       Container(
@@ -237,7 +238,7 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
                         overflow: TextOverflow.ellipsis,
                       ),
 
-                      const Spacer(),
+                      SizedBox(height: isMobile ? AppTheme.spacingS : AppTheme.spacingM),
 
                       // Technologies
                       Wrap(
@@ -264,7 +265,7 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
                         }).toList(),
                       ),
 
-                      const SizedBox(height: AppTheme.spacingM),
+                      SizedBox(height: isMobile ? AppTheme.spacingS : AppTheme.spacingM),
 
                       // Action Buttons
                       Row(
@@ -280,13 +281,14 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
                                     ),
                                   );
                                 },
-                                icon: const Icon(Icons.play_arrow, size: 16),
+                                icon: Icon(Icons.play_arrow, size: isMobile ? 14 : 16),
                                 label: const Text('Demo'),
                                 style: ElevatedButton.styleFrom(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: isMobile ? 12 : 16,
+                                    vertical: isMobile ? 10 : 12,
                                   ),
+                                  textStyle: TextStyle(fontSize: isMobile ? 12 : 14),
                                 ),
                               ),
                             ),
@@ -296,13 +298,14 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
                           Expanded(
                             child: OutlinedButton.icon(
                               onPressed: () => context.go('/projects'),
-                              icon: const Icon(Icons.info_outline, size: 16),
+                              icon: Icon(Icons.info_outline, size: isMobile ? 14 : 16),
                               label: const Text('Details'),
                               style: OutlinedButton.styleFrom(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isMobile ? 12 : 16,
+                                  vertical: isMobile ? 10 : 12,
                                 ),
+                                textStyle: TextStyle(fontSize: isMobile ? 12 : 14),
                               ),
                             ),
                           ),

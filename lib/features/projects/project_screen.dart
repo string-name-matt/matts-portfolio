@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:matt_smith_portfolio/shared/widgets/app_scaffold.dart';
-import 'package:matt_smith_portfolio/shared/theme.dart';
 import 'package:matt_smith_portfolio/shared/constants.dart';
+import 'package:matt_smith_portfolio/shared/theme.dart';
+import 'package:matt_smith_portfolio/shared/widgets/app_scaffold.dart';
 
 class ProjectScreen extends StatefulWidget {
   const ProjectScreen({super.key});
@@ -30,7 +30,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
     return AppScaffold(
       child: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
+          padding:
+              EdgeInsets.all(isMobile ? AppTheme.spacingM : AppTheme.spacingXL),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -79,7 +80,8 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       selectedColor: AppTheme.primaryBlue,
                       labelStyle: TextStyle(
                         color: isSelected ? Colors.white : AppTheme.mutedText,
-                        fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight:
+                            isSelected ? FontWeight.w600 : FontWeight.w400,
                       ),
                       side: BorderSide(
                         color: isSelected
@@ -110,7 +112,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       crossAxisCount: crossAxisCount,
                       crossAxisSpacing: AppTheme.spacingM,
                       mainAxisSpacing: AppTheme.spacingM,
-                      childAspectRatio: 0.75,
+                      childAspectRatio: 0.9,
                     ),
                     itemCount: _filteredProjects.length,
                     itemBuilder: (context, index) {
@@ -172,8 +174,7 @@ class _ProjectCardState extends State<_ProjectCard> {
       onExit: (_) => setState(() => _isHovered = false),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        transform: Matrix4.identity()
-          ..translate(0.0, _isHovered ? -8.0 : 0.0),
+        transform: Matrix4.identity()..translate(0.0, _isHovered ? -8.0 : 0.0),
         child: Container(
           decoration: BoxDecoration(
             color: AppTheme.cardBg,
@@ -264,7 +265,8 @@ class _ProjectCardState extends State<_ProjectCard> {
                             ),
                             decoration: BoxDecoration(
                               color: AppTheme.success.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                              borderRadius:
+                                  BorderRadius.circular(AppTheme.radiusS),
                               border: Border.all(
                                 color: AppTheme.success,
                                 width: 1,
@@ -287,7 +289,8 @@ class _ProjectCardState extends State<_ProjectCard> {
                             ),
                             decoration: BoxDecoration(
                               color: AppTheme.primaryBlue.withOpacity(0.2),
-                              borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                              borderRadius:
+                                  BorderRadius.circular(AppTheme.radiusS),
                             ),
                             child: Text(
                               widget.project.category,
@@ -360,7 +363,8 @@ class _ProjectCardState extends State<_ProjectCard> {
                             ),
                             decoration: BoxDecoration(
                               color: AppTheme.primaryBlue.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(AppTheme.radiusS),
+                              borderRadius:
+                                  BorderRadius.circular(AppTheme.radiusS),
                             ),
                             child: Text(
                               tech,
@@ -613,7 +617,8 @@ class _ProjectDetailsDialog extends StatelessWidget {
                           label: const Text('View Demo'),
                         ),
                       ),
-                    if (project.demoUrl.isNotEmpty && project.githubUrl.isNotEmpty)
+                    if (project.demoUrl.isNotEmpty &&
+                        project.githubUrl.isNotEmpty)
                       const SizedBox(width: 12),
                     if (project.githubUrl.isNotEmpty)
                       Expanded(

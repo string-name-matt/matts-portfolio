@@ -187,7 +187,6 @@ This portfolio is open source for reference and educational purposes. Feel free 
 Built with ❤️ using Flutter and Firebase
 
 If you found this portfolio impressive, feel free to:
-- ⭐ Star this repository
 - 📧 Reach out for collaboration opportunities
 - 🔗 Connect with me on LinkedIn
 

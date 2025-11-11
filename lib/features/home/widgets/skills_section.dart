@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:matt_smith_portfolio/shared/theme.dart';
 import 'package:matt_smith_portfolio/shared/constants.dart';
+import 'package:matt_smith_portfolio/shared/widgets/scroll_reveal_animation.dart';
 
 class SkillsSection extends StatefulWidget {
   const SkillsSection({super.key});
@@ -62,9 +63,12 @@ class _SkillsSectionState extends State<SkillsSection> {
                 itemBuilder: (context, index) {
                   final category = AppConstants.skills.keys.elementAt(index);
                   final skillItems = AppConstants.skills[category]!;
-                  return _SkillCategoryCard(
-                    category: category,
-                    skills: skillItems,
+                  return ScrollRevealAnimation(
+                    delay: index * 100,
+                    child: _SkillCategoryCard(
+                      category: category,
+                      skills: skillItems,
+                    ),
                   );
                 },
               );
@@ -76,7 +80,7 @@ class _SkillsSectionState extends State<SkillsSection> {
   }
 }
 
-class _SkillCategoryCard extends StatelessWidget {
+class _SkillCategoryCard extends StatefulWidget {
   final String category;
   final List<SkillItem> skills;
 
@@ -86,47 +90,73 @@ class _SkillCategoryCard extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(AppTheme.spacingM),
-      decoration: BoxDecoration(
-        color: AppTheme.cardBg,
-        borderRadius: BorderRadius.circular(AppTheme.radiusL),
-        border: Border.all(
-          color: AppTheme.primaryBlue.withOpacity(0.2),
-          width: 1,
-        ),
-        boxShadow: AppTheme.cardShadow,
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // Category Title
-          Text(
-            category,
-            style: AppTheme.headingMedium.copyWith(
-              color: AppTheme.primaryBlue,
-              fontSize: 20,
-            ),
-          ),
-          const SizedBox(height: AppTheme.spacingM),
+  State<_SkillCategoryCard> createState() => _SkillCategoryCardState();
+}
 
-          // Skills List
-          Expanded(
-            child: ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: skills.length,
-              itemBuilder: (context, index) {
-                final skill = skills[index];
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
-                  child: _AnimatedSkillBar(skill: skill),
-                );
-              },
+class _SkillCategoryCardState extends State<_SkillCategoryCard> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      child: AnimatedScale(
+        scale: _isHovered ? 1.02 : 1.0,
+        duration: const Duration(milliseconds: 200),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 200),
+          padding: const EdgeInsets.all(AppTheme.spacingM),
+          decoration: BoxDecoration(
+            color: AppTheme.cardBg,
+            borderRadius: BorderRadius.circular(AppTheme.radiusL),
+            border: Border.all(
+              color: _isHovered
+                  ? AppTheme.primaryBlue
+                  : AppTheme.primaryBlue.withOpacity(0.2),
+              width: _isHovered ? 2 : 1,
             ),
+            boxShadow: _isHovered
+                ? [
+                    BoxShadow(
+                      color: AppTheme.primaryBlue.withOpacity(0.2),
+                      blurRadius: 20,
+                      spreadRadius: 0,
+                    ),
+                  ]
+                : AppTheme.cardShadow,
           ),
-        ],
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Category Title
+              Text(
+                widget.category,
+                style: AppTheme.headingMedium.copyWith(
+                  color: AppTheme.primaryBlue,
+                  fontSize: 20,
+                ),
+              ),
+              const SizedBox(height: AppTheme.spacingM),
+
+              // Skills List
+              Expanded(
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: widget.skills.length,
+                  itemBuilder: (context, index) {
+                    final skill = widget.skills[index];
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
+                      child: _AnimatedSkillBar(skill: skill),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

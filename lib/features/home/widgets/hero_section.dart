@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:matt_smith_portfolio/shared/constants.dart';
 import 'package:matt_smith_portfolio/shared/theme.dart';
+import 'package:matt_smith_portfolio/shared/widgets/particle_background.dart';
+import 'package:matt_smith_portfolio/shared/widgets/animated_button.dart';
 
 class HeroSection extends StatefulWidget {
   const HeroSection({super.key});
@@ -11,14 +13,19 @@ class HeroSection extends StatefulWidget {
 }
 
 class _HeroSectionState extends State<HeroSection>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late AnimationController _controller;
+  late AnimationController _floatController;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
+  late Animation<double> _floatAnimation;
+  late Animation<double> _scaleAnimation;
 
   @override
   void initState() {
     super.initState();
+
+    // Entrance animation
     _controller = AnimationController(
       duration: const Duration(milliseconds: 1200),
       vsync: this,
@@ -33,12 +40,27 @@ class _HeroSectionState extends State<HeroSection>
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    );
+
+    // Floating animation for profile image
+    _floatController = AnimationController(
+      duration: const Duration(milliseconds: 3000),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _floatAnimation = Tween<double>(begin: -10.0, end: 10.0).animate(
+      CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
+    );
+
     _controller.forward();
   }
 
   @override
   void dispose() {
     _controller.dispose();
+    _floatController.dispose();
     super.dispose();
   }
 
@@ -49,32 +71,62 @@ class _HeroSectionState extends State<HeroSection>
 
     return Container(
       width: double.infinity,
-      padding: EdgeInsets.symmetric(
-        vertical: isMobile ? AppTheme.spacingXL : AppTheme.spacingXXL * 2,
-        horizontal: AppTheme.spacingM,
-      ),
       decoration: BoxDecoration(
         gradient: AppTheme.primaryGradient,
         borderRadius: BorderRadius.circular(AppTheme.radiusXL),
         boxShadow: AppTheme.glowShadow,
       ),
-      child: FadeTransition(
-        opacity: _fadeAnimation,
-        child: SlideTransition(
-          position: _slideAnimation,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Profile Image Placeholder
-
-              ClipOval(
-                child: Image.asset(
-                  'assets/images/matt.jpg',
-                  width: isMobile ? 120 : 200,
-                  height: isMobile ? 120 : 200,
-                  fit: BoxFit.cover,
-                ),
-              ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(AppTheme.radiusXL),
+        child: ParticleBackground(
+          particleCount: isMobile ? 15 : 25,
+          particleColor: Colors.white,
+          maxParticleSize: 3.0,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: isMobile ? AppTheme.spacingXL : AppTheme.spacingXXL * 2,
+              horizontal: AppTheme.spacingM,
+            ),
+            child: FadeTransition(
+              opacity: _fadeAnimation,
+              child: SlideTransition(
+                position: _slideAnimation,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Animated Profile Image with floating effect
+                    AnimatedBuilder(
+                      animation: _floatAnimation,
+                      builder: (context, child) {
+                        return Transform.translate(
+                          offset: Offset(0, _floatAnimation.value),
+                          child: child,
+                        );
+                      },
+                      child: ScaleTransition(
+                        scale: _scaleAnimation,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.white.withOpacity(0.3),
+                                blurRadius: 30,
+                                spreadRadius: 5,
+                              ),
+                            ],
+                          ),
+                          child: ClipOval(
+                            child: Image.asset(
+                              'assets/images/matt.jpg',
+                              width: isMobile ? 120 : 200,
+                              height: isMobile ? 120 : 200,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
 
               SizedBox(height: AppTheme.spacingL),
 
@@ -129,66 +181,167 @@ class _HeroSectionState extends State<HeroSection>
                 ),
               ),
 
-              SizedBox(height: AppTheme.spacingXL),
+                    SizedBox(height: AppTheme.spacingXL),
 
-              // CTA Buttons
-              Wrap(
-                spacing: AppTheme.spacingS,
-                runSpacing: AppTheme.spacingS,
-                alignment: WrapAlignment.center,
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () => context.go('/projects'),
-                    icon: const Icon(Icons.work_outline),
-                    label: const Text('View Projects'),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      foregroundColor: AppTheme.primaryBlue,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 24 : 32,
-                        vertical: isMobile ? 14 : 16,
-                      ),
-                      elevation: 8,
-                      shadowColor: Colors.black.withOpacity(0.3),
-                    ),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: () => context.go('/resume'),
-                    icon: const Icon(Icons.description_outlined),
-                    label: const Text('View Resume'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white, width: 2),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 24 : 32,
-                        vertical: isMobile ? 14 : 16,
-                      ),
-                    ),
-                  ),
-                  OutlinedButton.icon(
-                    onPressed: () {
-                      // TODO: Scroll to contact section or open email
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Email: ${AppConstants.email}'),
-                          backgroundColor: AppTheme.primaryBlue,
+                    // CTA Buttons with staggered animations
+                    Wrap(
+                      spacing: AppTheme.spacingS,
+                      runSpacing: AppTheme.spacingS,
+                      alignment: WrapAlignment.center,
+                      children: [
+                        // White button on gradient background
+                        MouseRegion(
+                          cursor: SystemMouseCursors.click,
+                          child: GestureDetector(
+                            onTap: () => context.go('/projects'),
+                            child: AnimatedScale(
+                              scale: 1.0,
+                              duration: const Duration(milliseconds: 150),
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: isMobile ? 24 : 32,
+                                  vertical: isMobile ? 14 : 16,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(AppTheme.borderRadiusM),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.3),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 4),
+                                    ),
+                                  ],
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      Icons.work_outline,
+                                      color: AppTheme.primaryBlue,
+                                      size: 20,
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      'View Projects',
+                                      style: AppTheme.bodyLarge.copyWith(
+                                        color: AppTheme.primaryBlue,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
-                      );
-                    },
-                    icon: const Icon(Icons.email_outlined),
-                    label: const Text('Contact Me'),
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: Colors.white,
-                      side: const BorderSide(color: Colors.white, width: 2),
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isMobile ? 24 : 32,
-                        vertical: isMobile ? 14 : 16,
-                      ),
+                        _HeroOutlinedButton(
+                          onPressed: () => context.go('/resume'),
+                          icon: Icons.description_outlined,
+                          label: 'View Resume',
+                          isMobile: isMobile,
+                        ),
+                        _HeroOutlinedButton(
+                          onPressed: () {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text('Email: ${AppConstants.email}'),
+                                backgroundColor: AppTheme.primaryBlue,
+                                behavior: SnackBarBehavior.floating,
+                                duration: const Duration(seconds: 3),
+                              ),
+                            );
+                          },
+                          icon: Icons.email_outlined,
+                          label: 'Contact Me',
+                          isMobile: isMobile,
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// Custom outlined button for hero section with animations
+class _HeroOutlinedButton extends StatefulWidget {
+  final VoidCallback onPressed;
+  final IconData icon;
+  final String label;
+  final bool isMobile;
+
+  const _HeroOutlinedButton({
+    required this.onPressed,
+    required this.icon,
+    required this.label,
+    required this.isMobile,
+  });
+
+  @override
+  State<_HeroOutlinedButton> createState() => _HeroOutlinedButtonState();
+}
+
+class _HeroOutlinedButtonState extends State<_HeroOutlinedButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return MouseRegion(
+      onEnter: (_) => setState(() => _isHovered = true),
+      onExit: (_) => setState(() => _isHovered = false),
+      cursor: SystemMouseCursors.click,
+      child: GestureDetector(
+        onTap: widget.onPressed,
+        child: AnimatedScale(
+          scale: _isHovered ? 1.05 : 1.0,
+          duration: const Duration(milliseconds: 150),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 200),
+            padding: EdgeInsets.symmetric(
+              horizontal: widget.isMobile ? 24 : 32,
+              vertical: widget.isMobile ? 14 : 16,
+            ),
+            decoration: BoxDecoration(
+              color: _isHovered ? Colors.white.withOpacity(0.1) : Colors.transparent,
+              borderRadius: BorderRadius.circular(AppTheme.borderRadiusM),
+              border: Border.all(
+                color: Colors.white,
+                width: 2,
+              ),
+              boxShadow: _isHovered
+                  ? [
+                      BoxShadow(
+                        color: Colors.white.withOpacity(0.3),
+                        blurRadius: 15,
+                        spreadRadius: 0,
+                      ),
+                    ]
+                  : [],
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  widget.icon,
+                  color: Colors.white,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  widget.label,
+                  style: AppTheme.bodyLarge.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

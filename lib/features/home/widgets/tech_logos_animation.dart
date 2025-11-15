@@ -28,16 +28,13 @@ class _TechLogosAnimationState extends State<TechLogosAnimation>
   late AnimationController _pulseController;
   late AnimationController _entranceController;
 
-  // List of tech logos to display
+  // List of tech logos to display - reduced to key technologies for better spacing
   final List<_LogoData> _logos = [
     _LogoData('assets/images/logos/flutter_logo.png', const Color(0xFF0175C2)),
     _LogoData('assets/images/logos/dart_logo.png', const Color(0xFF00D2B8)),
     _LogoData('assets/images/logos/firebase_logo.png', const Color(0xFFFFCA28)),
-    _LogoData('assets/images/logos/firestore_logo.png', const Color(0xFFFF6F00)),
-    _LogoData('assets/images/logos/cloud_functions_logo.png', const Color(0xFF4285F4)),
     _LogoData('assets/images/logos/node_logo.png', const Color(0xFF339933)),
     _LogoData('assets/images/logos/git_logo.png', const Color(0xFFF05032)),
-    _LogoData('assets/images/logos/google_cloud_logo.png', const Color(0xFF4285F4)),
     _LogoData('assets/images/logos/gemini_logo.png', const Color(0xFF886FBF)),
     _LogoData('assets/images/logos/openai_logo.png', const Color(0xFF10A37F)),
     _LogoData('assets/images/logos/riverpod_logo.png', const Color(0xFF00A3FF)),
@@ -159,37 +156,47 @@ class _LogosOrbitPainter extends CustomPainter {
     int index,
     int totalLogos,
   ) {
-    // Calculate unique orbital parameters for each logo
+    // Calculate unique orbital parameters for each logo with better distribution
     final double angleOffset = (index / totalLogos) * 2 * math.pi;
-    final double orbitSpeed = 1.0 + (index % 3) * 0.3; // Varying speeds
+
+    // Each logo gets a unique speed using golden ratio distribution for better spacing
+    // This prevents bunching that occurs with only 3 different speeds
+    final double orbitSpeed = 0.8 + (index * 0.137) % 0.6; // Varies from 0.8 to 1.4
     final double currentAngle = angleOffset + (orbitProgress * 2 * math.pi * orbitSpeed);
 
-    // Create 3D depth effect with varying orbit radii
+    // Give each logo a different orbit radius for layered, stable orbits
+    // Use 3 distinct orbital rings to keep logos in predictable paths
+    final double orbitRingIndex = (index % 3).toDouble();
+    final double logoRadius = baseRadius * (0.9 + orbitRingIndex * 0.1); // 0.9x, 1.0x, 1.1x
+
+    // Calculate 3D depth based on vertical position for scale/opacity only
+    // Don't use depth to vary radius - keeps orbits stable and visible
     final double depthPhase = (currentAngle + math.pi / 2) % (2 * math.pi);
     final double depth = (math.cos(depthPhase) + 1) / 2; // 0 to 1
-    final double radiusVariation = baseRadius * (0.7 + depth * 0.6);
 
-    // Calculate position with orbital motion
-    final double x = center.dx + math.cos(currentAngle) * radiusVariation;
-    final double y = center.dy + math.sin(currentAngle) * radiusVariation * 0.6; // Elliptical
+    // Calculate position with stable circular/elliptical motion
+    final double x = center.dx + math.cos(currentAngle) * logoRadius;
+    final double y = center.dy + math.sin(currentAngle) * logoRadius * 0.5; // Elliptical
 
     // Scale based on depth (closer = larger)
     final double entranceScale = Curves.elasticOut.transform(
       (entranceProgress * 1.5 - (index / totalLogos)).clamp(0.0, 1.0),
     );
-    final double depthScale = 0.5 + (depth * 0.5);
-    final double pulseScale = 1.0 + (math.sin(pulseProgress * 2 * math.pi + angleOffset) * 0.1);
+    final double depthScale = 0.6 + (depth * 0.4); // Reduced variation for more consistent sizing
+    final double pulseScale = 1.0 + (math.sin(pulseProgress * 2 * math.pi + angleOffset) * 0.08);
     final double finalScale = entranceScale * depthScale * pulseScale;
 
-    // Opacity based on depth and entrance
-    final double opacity = entranceScale * (0.6 + depth * 0.4);
+    // Improved opacity with higher minimum to prevent popping
+    // Smoothly transitions between 0.75 and 1.0 based on depth
+    final double depthOpacity = 0.75 + (depth * 0.25);
+    final double opacity = entranceScale * depthOpacity;
 
     // Logo size
     final double logoSize = 50 * finalScale;
 
     // Draw glow effect
     final glowPaint = Paint()
-      ..color = AppTheme.accentBlue.withOpacity(opacity * 0.3 * pulseProgress)
+      ..color = AppTheme.primaryBlue.withOpacity(opacity * 0.3 * pulseProgress)
       ..maskFilter = MaskFilter.blur(BlurStyle.normal, 15 * finalScale);
 
     canvas.drawCircle(
@@ -198,21 +205,22 @@ class _LogosOrbitPainter extends CustomPainter {
       glowPaint,
     );
 
-    // Draw connecting orbital trail (subtle)
-    if (index > 0 && depth > 0.5) {
+    // Draw connecting orbital trail (subtle) - only for select logos to reduce clutter
+    if (index > 0 && index % 3 == 0 && depth > 0.6) {
       final prevIndex = index - 1;
       final prevAngleOffset = (prevIndex / totalLogos) * 2 * math.pi;
-      final prevAngle = prevAngleOffset + (orbitProgress * 2 * math.pi * (1.0 + (prevIndex % 3) * 0.3));
-      final prevDepthPhase = (prevAngle + math.pi / 2) % (2 * math.pi);
-      final prevDepth = (math.cos(prevDepthPhase) + 1) / 2;
-      final prevRadius = baseRadius * (0.7 + prevDepth * 0.6);
+      final prevOrbitSpeed = 0.8 + (prevIndex * 0.137) % 0.6;
+      final prevAngle = prevAngleOffset + (orbitProgress * 2 * math.pi * prevOrbitSpeed);
+      final prevDepth = (math.cos((prevAngle + math.pi / 2) % (2 * math.pi)) + 1) / 2;
+      final prevOrbitRingIndex = (prevIndex % 3).toDouble();
+      final prevLogoRadius = baseRadius * (0.9 + prevOrbitRingIndex * 0.1);
 
-      final prevX = center.dx + math.cos(prevAngle) * prevRadius;
-      final prevY = center.dy + math.sin(prevAngle) * prevRadius * 0.6;
+      final prevX = center.dx + math.cos(prevAngle) * prevLogoRadius;
+      final prevY = center.dy + math.sin(prevAngle) * prevLogoRadius * 0.5;
 
       final trailPaint = Paint()
-        ..color = Colors.white.withOpacity(0.1 * depth)
-        ..strokeWidth = 1.0
+        ..color = Colors.white.withOpacity(0.08 * depth)
+        ..strokeWidth = 0.8
         ..style = PaintingStyle.stroke;
 
       canvas.drawLine(Offset(prevX, prevY), Offset(x, y), trailPaint);

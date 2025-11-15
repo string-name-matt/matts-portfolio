@@ -11,16 +11,8 @@ class ProjectScreen extends StatefulWidget {
 }
 
 class _ProjectScreenState extends State<ProjectScreen> {
-  String _selectedCategory = 'All';
-
-  List<ProjectItem> get _filteredProjects {
-    if (_selectedCategory == 'All') {
-      return AppConstants.projects;
-    }
-    return AppConstants.projects
-        .where((p) => p.category == _selectedCategory)
-        .toList();
-  }
+  // Category filters removed - can be added back when there are more projects
+  // Future consideration: Filter for pro-bono work (school/church projects)
 
   @override
   Widget build(BuildContext context) {
@@ -60,42 +52,6 @@ class _ProjectScreenState extends State<ProjectScreen> {
 
               SizedBox(height: AppTheme.spacingXL),
 
-              // Category Filters
-              Center(
-                child: Wrap(
-                  spacing: AppTheme.spacingS,
-                  runSpacing: AppTheme.spacingS,
-                  alignment: WrapAlignment.center,
-                  children: AppConstants.projectCategories.map((category) {
-                    final isSelected = _selectedCategory == category;
-                    return FilterChip(
-                      label: Text(category),
-                      selected: isSelected,
-                      onSelected: (selected) {
-                        setState(() {
-                          _selectedCategory = category;
-                        });
-                      },
-                      backgroundColor: AppTheme.cardBg,
-                      selectedColor: AppTheme.primaryBlue,
-                      labelStyle: TextStyle(
-                        color: isSelected ? Colors.white : AppTheme.mutedText,
-                        fontWeight:
-                            isSelected ? FontWeight.w600 : FontWeight.w400,
-                      ),
-                      side: BorderSide(
-                        color: isSelected
-                            ? AppTheme.primaryBlue
-                            : AppTheme.primaryBlue.withOpacity(0.3),
-                        width: isSelected ? 2 : 1,
-                      ),
-                    );
-                  }).toList(),
-                ),
-              ),
-
-              SizedBox(height: AppTheme.spacingXL),
-
               // Projects Grid
               LayoutBuilder(
                 builder: (context, constraints) {
@@ -122,39 +78,16 @@ class _ProjectScreenState extends State<ProjectScreen> {
                       mainAxisSpacing: AppTheme.spacingM,
                       childAspectRatio: aspectRatio,
                     ),
-                    itemCount: _filteredProjects.length,
+                    itemCount: AppConstants.projects.length,
                     itemBuilder: (context, index) {
                       return _ProjectCard(
-                        project: _filteredProjects[index],
+                        project: AppConstants.projects[index],
                         isMobile: isMobile,
                       );
                     },
                   );
                 },
               ),
-
-              if (_filteredProjects.isEmpty)
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(AppTheme.spacingXL),
-                    child: Column(
-                      children: [
-                        Icon(
-                          Icons.search_off,
-                          size: 64,
-                          color: AppTheme.mutedText,
-                        ),
-                        SizedBox(height: AppTheme.spacingM),
-                        Text(
-                          'No projects found in this category',
-                          style: AppTheme.bodyLarge.copyWith(
-                            color: AppTheme.mutedText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
             ],
           ),
         ),

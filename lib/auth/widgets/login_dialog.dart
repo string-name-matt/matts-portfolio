@@ -95,10 +95,18 @@ class _LoginDialogState extends State<LoginDialog> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
                 child: Image.asset(
-                  'images/mb_logo.png', fit: BoxFit.fitHeight,
-                  // Make sure the logo is listed in pubspec.yaml
+                  'assets/images/mb_logo.png',
+                  fit: BoxFit.fitHeight,
                   height: 200,
                   width: 200,
+                  // Fallback for web builds
+                  errorBuilder: (context, error, stackTrace) {
+                    return const SizedBox(
+                      height: 200,
+                      width: 200,
+                      child: Icon(Icons.account_circle, size: 100),
+                    );
+                  },
                 ),
               ),
               Row(

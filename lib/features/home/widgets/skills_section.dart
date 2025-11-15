@@ -44,11 +44,12 @@ class _SkillsSectionState extends State<SkillsSection> {
           // Skills Grid
           LayoutBuilder(
             builder: (context, constraints) {
-              final crossAxisCount = constraints.maxWidth > 1200
-                  ? 4
-                  : constraints.maxWidth > 768
-                      ? 2
-                      : 1;
+              final isDesktop = constraints.maxWidth > 1200;
+              final isTablet = constraints.maxWidth > 768 && constraints.maxWidth <= 1200;
+              final crossAxisCount = isDesktop ? 4 : (isTablet ? 2 : 1);
+
+              // Adjust aspect ratio for mobile to give more vertical space
+              final aspectRatio = isMobile ? 1.0 : (isTablet ? 1.1 : 1.2);
 
               return GridView.builder(
                 shrinkWrap: true,
@@ -57,7 +58,7 @@ class _SkillsSectionState extends State<SkillsSection> {
                   crossAxisCount: crossAxisCount,
                   crossAxisSpacing: AppTheme.spacingM,
                   mainAxisSpacing: AppTheme.spacingM,
-                  childAspectRatio: 1.2,
+                  childAspectRatio: aspectRatio,
                 ),
                 itemCount: AppConstants.skills.length,
                 itemBuilder: (context, index) {
@@ -68,6 +69,7 @@ class _SkillsSectionState extends State<SkillsSection> {
                     child: _SkillCategoryCard(
                       category: category,
                       skills: skillItems,
+                      isMobile: isMobile,
                     ),
                   );
                 },
@@ -83,10 +85,12 @@ class _SkillsSectionState extends State<SkillsSection> {
 class _SkillCategoryCard extends StatefulWidget {
   final String category;
   final List<SkillItem> skills;
+  final bool isMobile;
 
   const _SkillCategoryCard({
     required this.category,
     required this.skills,
+    required this.isMobile,
   });
 
   @override
@@ -106,7 +110,9 @@ class _SkillCategoryCardState extends State<_SkillCategoryCard> {
         duration: const Duration(milliseconds: 200),
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.all(AppTheme.spacingM),
+          padding: EdgeInsets.all(
+            widget.isMobile ? AppTheme.spacingS : AppTheme.spacingM,
+          ),
           decoration: BoxDecoration(
             color: AppTheme.cardBg,
             borderRadius: BorderRadius.circular(AppTheme.radiusL),
@@ -128,16 +134,17 @@ class _SkillCategoryCardState extends State<_SkillCategoryCard> {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // Category Title
               Text(
                 widget.category,
                 style: AppTheme.headingMedium.copyWith(
                   color: AppTheme.primaryBlue,
-                  fontSize: 20,
+                  fontSize: widget.isMobile ? 16 : 20,
                 ),
               ),
-              const SizedBox(height: AppTheme.spacingM),
+              SizedBox(height: widget.isMobile ? AppTheme.spacingS : AppTheme.spacingM),
 
               // Skills List
               ListView.builder(
@@ -147,7 +154,9 @@ class _SkillCategoryCardState extends State<_SkillCategoryCard> {
                 itemBuilder: (context, index) {
                   final skill = widget.skills[index];
                   return Padding(
-                    padding: const EdgeInsets.only(bottom: AppTheme.spacingS),
+                    padding: EdgeInsets.only(
+                      bottom: widget.isMobile ? 10 : AppTheme.spacingS,
+                    ),
                     child: _AnimatedSkillBar(skill: skill),
                   );
                 },
@@ -200,8 +209,12 @@ class _AnimatedSkillBarState extends State<_AnimatedSkillBar>
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final isMobile = size.width < 768;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Row(
           children: [
@@ -209,58 +222,74 @@ class _AnimatedSkillBarState extends State<_AnimatedSkillBar>
             widget.skill.icon.isNotEmpty
                 ? Image.asset(
                     widget.skill.icon,
-                    width: 20,
-                    height: 20,
+                    width: isMobile ? 18 : 20,
+                    height: isMobile ? 18 : 20,
                     errorBuilder: (context, error, stackTrace) {
                       // Fallback to text if image fails to load
                       return Container(
-                        width: 20,
-                        height: 20,
+                        width: isMobile ? 18 : 20,
+                        height: isMobile ? 18 : 20,
                         decoration: BoxDecoration(
-                          color: AppTheme.primaryBlue.withOpacity(0.2),
+                          color: widget.skill.levelColor.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(4),
                         ),
-                        child: const Icon(
+                        child: Icon(
                           Icons.code,
-                          size: 14,
-                          color: AppTheme.primaryBlue,
+                          size: isMobile ? 12 : 14,
+                          color: widget.skill.levelColor,
                         ),
                       );
                     },
                   )
                 : Container(
-                    width: 20,
-                    height: 20,
+                    width: isMobile ? 18 : 20,
+                    height: isMobile ? 18 : 20,
                     decoration: BoxDecoration(
-                      color: AppTheme.primaryBlue.withOpacity(0.2),
+                      color: widget.skill.levelColor.withOpacity(0.2),
                       borderRadius: BorderRadius.circular(4),
                     ),
-                    child: const Icon(
+                    child: Icon(
                       Icons.code,
-                      size: 14,
-                      color: AppTheme.primaryBlue,
+                      size: isMobile ? 12 : 14,
+                      color: widget.skill.levelColor,
                     ),
                   ),
-            const SizedBox(width: 12),
+            SizedBox(width: isMobile ? 8 : 12),
             Expanded(
               child: Text(
                 widget.skill.name,
                 style: AppTheme.bodyMedium.copyWith(
                   color: AppTheme.lightText,
-                  fontSize: 14,
+                  fontSize: isMobile ? 12 : 14,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
-            Text(
-              '${(widget.skill.level * 100).toInt()}%',
-              style: AppTheme.caption.copyWith(
-                color: AppTheme.mutedText,
-                fontSize: 12,
+            Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: isMobile ? 6 : 8,
+                vertical: 2,
+              ),
+              decoration: BoxDecoration(
+                color: widget.skill.levelColor.withOpacity(0.15),
+                borderRadius: BorderRadius.circular(4),
+                border: Border.all(
+                  color: widget.skill.levelColor.withOpacity(0.5),
+                  width: 1,
+                ),
+              ),
+              child: Text(
+                widget.skill.experienceLevel,
+                style: AppTheme.caption.copyWith(
+                  color: widget.skill.levelColor,
+                  fontSize: isMobile ? 9 : 11,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 4),
+        SizedBox(height: isMobile ? 6 : 8),
         AnimatedBuilder(
           animation: _animation,
           builder: (context, child) {
@@ -270,9 +299,9 @@ class _AnimatedSkillBarState extends State<_AnimatedSkillBar>
                 value: _animation.value,
                 backgroundColor: AppTheme.darkBg,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  AppTheme.primaryBlue,
+                  widget.skill.levelColor,
                 ),
-                minHeight: 6,
+                minHeight: isMobile ? 4 : 6,
               ),
             );
           },

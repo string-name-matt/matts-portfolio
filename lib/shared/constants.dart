@@ -579,6 +579,24 @@ class SkillItem {
     required this.level,
     required this.icon,
   });
+
+  /// Returns a readable experience level based on the numeric level
+  String get experienceLevel {
+    if (level >= 0.95) return 'Expert';
+    if (level >= 0.85) return 'Advanced';
+    if (level >= 0.75) return 'Proficient';
+    if (level >= 0.65) return 'Intermediate';
+    return 'Familiar';
+  }
+
+  /// Returns a color for the experience level
+  Color get levelColor {
+    if (level >= 0.95) return const Color(0xFF10B981); // Green - Expert
+    if (level >= 0.85) return const Color(0xFF2563EB); // Blue - Advanced
+    if (level >= 0.75) return const Color(0xFF7C3AED); // Purple - Proficient
+    if (level >= 0.65) return const Color(0xFFF59E0B); // Orange - Intermediate
+    return const Color(0xFF94A3B8); // Gray - Familiar
+  }
 }
 
 // Project Item Model
